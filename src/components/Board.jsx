@@ -7,8 +7,8 @@ export default React.createClass({
   },
   render: function() {
     return <div className="board">
-      {this.getPlayers().map(entry =>
-      <Player key={entry.sequence} player={entry} />
+    {this.getPlayers().map(entry =>
+      <Player key={entry.sequence} {...entry} />
       )}
     </div>;
   }

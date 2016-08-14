@@ -6,18 +6,18 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import injectTapEventPlugin from "react-tap-event-plugin";
 
-const players=[{sequence: 1, figures: ["ele","mele","dudki"]}
-,{sequence: 2, figures: ["ala","ma","kota"]}];
+const players=[{sequence: 1, figures: [{chclass: "ele"},{chclass: "mele"},{chclass: "dudki"}]}
+,{sequence: 2, figures: [{chclass: "ala"},{chclass: "ma"},{chclass: "kota"}]}];
 
 const App = () => (
-      <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
-    <Board players={players} />
-  </MuiThemeProvider>
-);
+	<MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
+	<Board players={players} />
+	</MuiThemeProvider>
+	);
 
 injectTapEventPlugin();
 
 ReactDOM.render(
-  <App />,
-  document.getElementById('app')
-);
+	<App />,
+	document.getElementById('app')
+	);
