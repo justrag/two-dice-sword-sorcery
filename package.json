@@ -22,12 +22,18 @@
     "presets": [
       "es2015",
       "react"
-    ]
+    ],
+    "plugins": ["transform-object-rest-spread"]
   },
   "dependencies": {
+    "babel-plugin-transform-object-rest-spread": "^6.8.0",
+    "material-ui": "^0.15.4",
+    "npm": "^3.10.6",
     "react": "^15.3.0",
     "react-addons-pure-render-mixin": "^15.3.0",
     "react-dom": "^15.3.0",
-    "react-tap-event-plugin": "^1.0.0"
+    "react-redux": "^4.4.5",
+    "react-tap-event-plugin": "^1.0.0",
+    "redux": "^3.5.2"
   }
 }

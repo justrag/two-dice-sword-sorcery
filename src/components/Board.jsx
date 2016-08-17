@@ -1,7 +1,8 @@
 import React from 'react';
 import Player from './Player';
+import {connect} from 'react-redux';
 
-export default React.createClass({
+export const Board = React.createClass({
   getPlayers: function() {
     return this.props.players || [];
   },
@@ -13,3 +14,11 @@ export default React.createClass({
     </div>;
   }
 });
+
+function mapStateToProps(state) {
+  return {
+    players: state.players
+  };
+}
+
+export const BoardContainer= connect(mapStateToProps)(Board);
