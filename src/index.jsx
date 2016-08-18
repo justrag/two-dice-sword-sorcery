@@ -29,11 +29,13 @@ store.dispatch({
 */
 
 const players=[{sequence: 1, figures: [{chclass: "Caster", rep: 4, ac: 6},{chclass: "Missile", rep: 5, ac: 4},{chclass: "Melee", rep: 4, ac: 6}]}
-,{sequence: 2, figures: [{chclass: "Caster", rep: 6, ac: 4},{chclass: "Missile", rep: 5, ac: 4},{chclass: "Missile", rep: 4, ac: 8},{chclass: "Melee", rep: 5, ac: 6}]}];
+,{sequence: 2, figures: [{chclass: "Caster", rep: 6, ac: 4},{chclass: "Missile", rep: 5, ac: 4},{chclass: "Missile", rep: 4, ac: 2},{chclass: "Melee", rep: 5, ac: 6}]}];
+
+const initBoard={turn: 0, phase: 0, players};
 
 store.dispatch({
 type: 'SET_STATE',
-state: {players: players}
+state: initBoard
 	});
 
 const App = () => (
