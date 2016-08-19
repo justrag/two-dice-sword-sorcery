@@ -28,25 +28,22 @@ const CasterIcon = (props) => (
   );
 
 export default React.createClass({
-//      <Avatar color="#00C" icon={<MeleeIcon style={iconStyles} color={red500} hoverColor={greenA200} />} />
-render: function() {
-let icon;
+  render: function() {
+    let icon;
 
-if (this.props.chclass=="Caster") {
-  icon=<CasterIcon color={yellow500} />;
-} else if (this.props.chclass=="Missile") {
-  icon=<MissileIcon color={teal900} />;
-} else if (this.props.chclass=="Melee") {
-  icon=<MeleeIcon color={red500} />;
-} else {
-  icon=<div />;
-}
-//    <Chip style={styles.chip} backgroundColor={teal900}>
-//    <Avatar size={32} color={yellow500} backgroundColor={teal900} icon={icon} />
-  return (
-    <Chip style={styles.chip}>
-    <Avatar backgroundColor={yellow500} color={red500} icon={icon} />
-    Rep: {this.props.rep} AC: {this.props.ac} 
-    </Chip>
-    )}
-});
+    if (this.props.chclass=="Caster") {
+      icon=<CasterIcon color={yellow500} />;
+    } else if (this.props.chclass=="Missile") {
+      icon=<MissileIcon color={teal900} />;
+    } else if (this.props.chclass=="Melee") {
+      icon=<MeleeIcon color={red500} />;
+    } else {
+      icon=<div />;
+    }
+    return (
+      <Chip style={styles.chip}>
+      <Avatar backgroundColor={yellow500} color={red500} icon={icon} />
+      Rep: {this.props.rep} AC: {this.props.ac} 
+      </Chip>
+      )}
+  });

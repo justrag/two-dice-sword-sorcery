@@ -1,5 +1,6 @@
 import React from 'react';
 import {Step, Stepper, StepLabel} from 'material-ui/Stepper';
+import Paper from 'material-ui/Paper';
 import AppBar from 'material-ui/AppBar';
 import MovementIcon from 'material-ui/svg-icons/action/open-with';
 import AttackIcon from 'material-ui/svg-icons/image/flash-on';
@@ -38,6 +39,14 @@ export const TurnBar = ({turn}) => {
     );
 }
 
+const paperStyle = {
+//  height: 100,
+//  width: 100,
+  margin: 20,
+  textAlign: 'center',
+  display: 'inline-block',
+};
+
 export const Board = React.createClass({
   getPlayers: function() {
     return this.props.players || [];
@@ -45,17 +54,19 @@ export const Board = React.createClass({
   render: function() {
     return <div className="board">
      <TurnBar turn={this.props.turn} />
-     <Phase step={this.props.phase} />
+     {((this.props.turn>0)?<Phase step={this.props.phase} />:"")}
      <WhatToDo turn={this.props.turn} phase={this.props.phase} actions={this.props.actions} />
     {this.getPlayers().map(entry =>
       <Player key={entry.sequence} {...entry} />
       )}
+    <Paper style={paperStyle} zDepth={1}>{this.props.textlog}</Paper>
     </div>;
   }
 });
 
 function mapStateToProps(state) {
   return {
+    textlog: state.textlog,
     players: state.players,
     turn: state.turn,
     phase: state.phase

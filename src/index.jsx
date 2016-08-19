@@ -8,6 +8,7 @@ import injectTapEventPlugin from "react-tap-event-plugin";
 import {createStore} from 'redux';
 import {Provider} from 'react-redux';
 import reducer from './reducer';
+import shortid from 'shortid';
 
 
 // We instantiate a new Redux store
@@ -28,10 +29,24 @@ store.dispatch({
 });
 */
 
-const players=[{sequence: 1, figures: [{chclass: "Caster", rep: 4, ac: 6},{chclass: "Missile", rep: 5, ac: 4},{chclass: "Melee", rep: 4, ac: 6}]}
-,{sequence: 2, figures: [{chclass: "Caster", rep: 6, ac: 4},{chclass: "Missile", rep: 5, ac: 4},{chclass: "Missile", rep: 4, ac: 2},{chclass: "Melee", rep: 5, ac: 6}]}];
+const players=[{sequence: 1, moving: true,
+	figures: [
+	{type: "STAR",  chclass: "Caster", rep: 5, ac: 6, id: shortid.generate()},
+	{type: "GRUNT", chclass: "Missile", rep: 4, ac: 4, id: shortid.generate()},
+	{type: "GRUNT", chclass: "Melee", rep: 3, ac: 6, id: shortid.generate()}
+	]
+}
+,{sequence: 2, moving: false,
+	figures: [
+	{type: "STAR",  chclass: "Caster", rep: 5, ac: 4, id: shortid.generate()},
+	{type: "GRUNT", chclass: "Missile", rep: 4, ac: 4, id: shortid.generate()},
+	{type: "GRUNT", chclass: "Missile", rep: 3, ac: 2, id: shortid.generate()},
+	{type: "GRUNT", chclass: "Melee", rep: 3, ac: 6, id: shortid.generate()}
+	]
+}
+];
 
-const initBoard={turn: 0, phase: 0, players};
+const initBoard={turn: 0, phase: 0, textlog: "Starting the game, player 1 moving",players};
 
 store.dispatch({
 type: 'SET_STATE',
