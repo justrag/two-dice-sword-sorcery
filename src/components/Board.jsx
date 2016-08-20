@@ -57,7 +57,7 @@ export const Board = React.createClass({
      {((this.props.turn>0)?<Phase step={this.props.phase} />:"")}
      <WhatToDo turn={this.props.turn} phase={this.props.phase} actions={this.props.actions} />
     {this.getPlayers().map(entry =>
-      <Player key={entry.sequence} {...entry} />
+      <Player key={entry.sequence} sourceSelected={this.props.sourceSelected} actions={this.props.actions} {...entry} />
       )}
     <Paper style={paperStyle} zDepth={1}>{this.props.textlog}</Paper>
     </div>;
@@ -69,7 +69,9 @@ function mapStateToProps(state) {
     textlog: state.textlog,
     players: state.players,
     turn: state.turn,
-    phase: state.phase
+    phase: state.phase,
+    sourceSelected: state.sourceSelected,
+
   };
 }
 

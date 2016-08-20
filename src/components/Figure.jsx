@@ -6,8 +6,12 @@ import {teal900, yellow500, red500} from 'material-ui/styles/colors';
 import SvgIcon from 'material-ui/SvgIcon';
 
 const styles = {
-  chip: {
+  unselected: {
     margin: 5
+  },
+  selected: {
+    margin: 3,
+    border: "red solid thick"
   }
 };
 
@@ -40,10 +44,21 @@ export default React.createClass({
     } else {
       icon=<div />;
     }
+
+    let clickHandler;
+    if (this.props.playerActive) {
+      clickHandler = () => this.props.actions.selectSource(this.props.id);
+    } else {
+      clickHandler = () => this.props.actions.selectTarget(this.props.id);
+    }
+    let selectedStyle=(this.props.sourceSelected==this.props.id)?styles.selected:styles.unselected;
+//    console.log(this.props.sourceSelected,this.props.id);
+
     return (
-      <Chip style={styles.chip}>
+      <Chip onClick={clickHandler} style={selectedStyle} >
       <Avatar backgroundColor={yellow500} color={red500} icon={icon} />
-      Rep: {this.props.rep} AC: {this.props.ac} 
+      Rep: {this.props.rep} AC: {this.props.ac}
+      {this.props.attacking?`Attacking: ${this.props.attacking}`:""}
       </Chip>
       )}
   });

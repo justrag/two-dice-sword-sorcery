@@ -10,7 +10,7 @@ export default React.createClass({
 	render: function() {
 		return <div className="player" style={flexstyle}>
 		{this.getFigures().map((entry,index) =>
-			<Figure key={index} {...entry} />
+			<Figure key={index} playerActive={this.props.active} sourceSelected={this.props.sourceSelected} actions={this.props.actions} {...entry} />
 			)}
 		</div>;
 	}

@@ -1,4 +1,4 @@
-import {ROLL_FOR_INITIATIVE, SET_STATE, TARGET} from './actions';
+import {ROLL_FOR_INITIATIVE, SET_STATE, TARGET, SELECT_SOURCE, SELECT_TARGET} from './actions';
 import {rollVsRep,findLeaderRep} from './game_utils';
 
 function setState(state, newState) {
@@ -60,6 +60,28 @@ let newState={turn: 1, phase: 0, players: newPlayers, textlog};
 return {...state,...newState};
 }
 
+
+function selectSource(state, figure_id) {
+// only in phase 0 "Movement"
+if (state.phase!=0) {return state;}
+// Validate if the figure could be selected (it belongs to active player)
+if (state.players.filter((p) => (p.active))[0].figures.filter((f) => (f.id==figure_id)).length!=1) {return state;}
+return {...state, sourceSelected: figure_id};
+}
+
+function selectTarget(state, figure_id) {
+// only in phase 0 "Movement"
+if (state.phase!=0) {return state;}
+// is source selected?
+if (!state.sourceSelected) {return state;}
+// Validate if the figure could be selected (it belongs to inactive player)
+if (state.players.filter((p) => (!p.active))[0].figures.filter((f) => (f.id==figure_id)).length!=1) {return state;}
+
+let newPlayers=[...state.players];
+newPlayers.filter((p) => (p.active))[0].figures.filter((f) => (f.id==state.sourceSelected))[0].attacking=figure_id;
+return {...state, sourceSelected: undefined, players: newPlayers};
+}
+
 function target(state) {
 	if (state.phase!=0) {
 		// only in phase 0 "Movement"
@@ -96,8 +118,10 @@ export default function(state = {}, action) {
 		return setState(state, action.state);
 		case ROLL_FOR_INITIATIVE: 
 		return rollForInitiative(state);
-		case TARGET:
-		return target(state);
+		case SELECT_SOURCE:
+		return selectSource(state,action.figure_id);
+		case SELECT_TARGET:
+		return selectTarget(state,action.figure_id);
 	}
 	return state;
 }
