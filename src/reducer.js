@@ -29,11 +29,11 @@ const rollForInitiativeReducer = (state) => {
   return { ...state, turn: 1, phase: 0, players: newPlayers };
 };
 
+//  [decrement]: (state) => state - 1,
+//  [add]: (state, payload) => state + payload,
 const gameReducer = createReducer({
   [randomInit]: randomInitReducer,
   [rollForInitiative]: rollForInitiativeReducer,
-//  [decrement]: (state) => state - 1,
-//  [add]: (state, payload) => state + payload,
 },
 { figures: [],
   turn: 0,
@@ -52,7 +52,13 @@ const uiReducer = createReducer({
   }
 );
 
+const bulbaReducer = (state, payload) => {
+  console.debug('state, payload: %o %o', state, payload);
+  return Date.now();
+};
+
 const reducer = combineReducers({
+  bulba: bulbaReducer,
   game: gameReducer,
   ui: uiReducer,
 });
