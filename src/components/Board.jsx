@@ -17,12 +17,20 @@ export const TurnBar = ({ turn }) => (
   );
 TurnBar.propTypes = { turn: React.PropTypes.number };
 
+const renderBoard = (props) => {
+//  const { turn, phase, players, sourceSelected, actions } = props;
+  if (props.turn > 0) {
+    return <PlayBoard {...props} />;
+  }
+  return <InitBoard {...props} />;
+};
+
 const Board = (props) => {
-  const { turn, phase, players, sourceSelected, actions } = props;
+  // const { turn, phase, players, figures, sourceSelected, actions } = props;
   return (
     <div className="board">
-      <TurnBar turn={turn} />
-      { ((turn > 0) ? <PlayBoard {...props} /> : <InitBoard {...props} />)}
+      <TurnBar turn={props.turn} />
+      { renderBoard(props) }
     </div>
 		);
 };
@@ -42,6 +50,7 @@ const Board = (props) => {
 // }
 
 const mapStateToProps = (state) => ({
+  figures: state.game.figures,
   players: state.game.players,
   turn: state.game.turn,
   phase: state.game.phase,

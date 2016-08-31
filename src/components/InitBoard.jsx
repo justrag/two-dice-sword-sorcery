@@ -19,7 +19,7 @@ const RollForInitiativeButton = (props) => (
     style={{ margin: 12 }}
     icon={<RollIcon color="black" />}
   />
-	);
+  );
 RollForInitiativeButton.propTypes = { rollForInitiative: React.PropTypes.func.isRequired };
 
 const InitBoard = (props) => {

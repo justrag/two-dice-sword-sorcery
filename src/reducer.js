@@ -3,6 +3,8 @@ import { combineReducers } from 'redux';
 
 import { randomInit, rollForInitiative, selectAttackSource } from './actionCreators';
 
+export const getFigures = (figures) => figures.allIds.map(id => figures.byId[id]);
+
 const randomInitReducer = (state) => {
   const figures = {
     byId: {
@@ -14,7 +16,7 @@ const randomInitReducer = (state) => {
       13: { player: 2, type: 'GRUNT', chclass: 'Missile', rep: 3, ac: 2 },
       14: { player: 2, type: 'GRUNT', chclass: 'Melee', rep: 3, ac: 6 },
     },
-    byOrder: [1, 2, 3, 11, 12, 13, 14],
+    allIds: [1, 2, 3, 11, 12, 13, 14],
   };
 
   return {
