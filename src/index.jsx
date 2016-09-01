@@ -7,8 +7,8 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
-import BoardContainer from './components/Board';
-import reducer from './reducer';
+import BoardContainer from './containers/Board';
+import reducer from './reducers';
 
 // We instantiate a new Redux store
 // const store = createStore(reducer);
