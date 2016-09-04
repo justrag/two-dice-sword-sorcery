@@ -1,16 +1,19 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import Divider from 'material-ui/Divider';
 import PhaseBar from '../components/PhaseBar';
-import Figure from '../components/Figure';
+import FigureRow from '../components/FigureRow';
 
-import { getTurn, getPhase, getFigures } from '../reducers';
+import { getTurn, getPhase, getPlayerFigures } from '../reducers';
 
-const PlayBoard = ({ turn, phase, figures }) => (
+const PlayBoard = ({ turn, phase, figures1, figures2 }) => (
   <div><h3>Turn: {turn}</h3>
     <PhaseBar step={phase} />
-    <div className="figure_row" style={{ display: 'flex' }}>
-    {figures.map(f => <Figure key={f.id} {...f} />)}
-    </div>
+    <h2>Player 1</h2>
+    <FigureRow figures={figures1} />
+    <Divider />
+    <h2>Player 2</h2>
+    <FigureRow figures={figures2} />
   </div>
 );
 
@@ -18,7 +21,8 @@ const mapStateToProps = (state) => (
   {
     turn: getTurn(state),
     phase: getPhase(state),
-    figures: getFigures(state),
+    figures1: getPlayerFigures(state, 1),
+    figures2: getPlayerFigures(state, 2),
   }
   );
 

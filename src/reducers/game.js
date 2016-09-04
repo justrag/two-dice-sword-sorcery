@@ -4,12 +4,13 @@ import { randomInit, rollForInitiative, initEnd } from '../actionCreators';
 import { rollVsRep } from '../game_utils';
 
 export const getFigures = (state) => state.figures.allIds.map(id => state.figures.byId[id]);
+export const getPlayerFigures =
+  (state, playerId) => getFigures(state).filter(f => f.player === playerId);
 export const getTurn = (state) => state.turn;
 export const getPhase = (state) => state.phase;
 export const getPlayers = (state) => state.players.allIds.map(id => state.players.byId[id]);
 export const getInitRoll = (state) => state.initRoll;
 
-const getPlayerFigures = (state, playerId) => getFigures(state).filter(f => f.player === playerId);
 const findMovingPlayer = (state) => getPlayers(state).filter(p => p.moving)[0];
 const findMovingPlayerId = (state) => findMovingPlayer(state).id;
 
@@ -58,25 +59,24 @@ const rollForInitiativeReducer = (state) => {
   const pass1 = roll1.passed;
   const pass2 = roll2.passed;
 
-  let activePlayer;
-  if (pass1 > pass2) activePlayer = 1;
-  else if (pass2 > pass1) activePlayer = 2;
-  else if (rep1 > rep2) activePlayer = 1;
-  else if (rep2 > rep1) activePlayer = 2;
-  else activePlayer = findMovingPlayerId(state);
+  let startingPlayer;
+  if (pass1 > pass2) startingPlayer = 1;
+  else if (pass2 > pass1) startingPlayer = 2;
+  else if (rep1 > rep2) startingPlayer = 1;
+  else if (rep2 > rep1) startingPlayer = 2;
+  else startingPlayer = findMovingPlayerId(state);
 
-  const inactivePlayer = (activePlayer === 1) ? 2 : 1;
-  const initRoll = { rep1, rep2, roll1, roll2, pass1, pass2, activePlayer, inactivePlayer };
+  const initRoll = { rep1, rep2, roll1, roll2, startingPlayer };
 
-  const newPlayers = { ...state.players };
-
-  newPlayers.byId[activePlayer].active = true;
-  newPlayers.byId[inactivePlayer].active = false;
+  // const newPlayers = { ...state.players };
+  // newPlayers.byId[activePlayer].active = true;
+  // newPlayers.byId[inactivePlayer].active = false;
+  //  players: { ...state.players, byId: newPlayers },
 
   return { ...state,
    phase: 2,
    initRoll,
-   players: { ...state.players, byId: newPlayers },
+   activePlayer: startingPlayer,
  };
 };
 

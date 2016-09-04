@@ -1,7 +1,7 @@
 import React from 'react';
 
 const Figure = ({ chclass, type, rep, ac }) => (
-  <div>
+  <div style={{ border: 'thick solid black', margin: '2px', padding: '2px' }}>
   {chclass}&nbsp;{type} Rep:&nbsp;{rep}&nbsp;AC:&nbsp;{ac}
   </div>
   );
