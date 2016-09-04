@@ -1,9 +1,24 @@
 import { createReducer } from 'redux-act';
-import { randomInit, rollForInitiative } from '../actionCreators';
+import { randomInit, rollForInitiative, initEnd } from '../actionCreators';
+
+import { rollVsRep } from '../game_utils';
 
 export const getFigures = (state) => state.figures.allIds.map(id => state.figures.byId[id]);
 export const getTurn = (state) => state.turn;
 export const getPhase = (state) => state.phase;
+export const getPlayers = (state) => state.players.allIds.map(id => state.players.byId[id]);
+export const getInitRoll = (state) => state.initRoll;
+
+const getPlayerFigures = (state, playerId) => getFigures(state).filter(f => f.player === playerId);
+const findMovingPlayer = (state) => getPlayers(state).filter(p => p.moving)[0];
+const findMovingPlayerId = (state) => findMovingPlayer(state).id;
+
+const findLeaderRep = (state, playerId) => {
+  const figs = getPlayerFigures(state, playerId);
+  const leaderFig = figs.filter(f => f.type === 'STAR');
+  if (leaderFig.length === 1) return leaderFig[0].rep;
+  return Math.max(...figs.map(f => f.rep));
+};
 
 const randomInitReducer = (state) => {
   const figures = {
@@ -19,28 +34,62 @@ const randomInitReducer = (state) => {
     allIds: [1, 2, 3, 11, 12, 13, 14],
   };
 
+  const players = {
+    byId: {
+      1: { id: 1, type: 'HUMAN', moving: true, name: 'Human player' },
+      2: { id: 2, type: 'COMPUTER', moving: false, name: 'AI player' },
+    },
+    allIds: [1, 2],
+  };
+
   return {
     ...state,
     phase: 1,
     figures,
+    players,
   };
 };
 
 const rollForInitiativeReducer = (state) => {
-  const newPlayers = [];
-  return { ...state, turn: 1, phase: 0, players: newPlayers };
+  const rep1 = findLeaderRep(state, 1);
+  const rep2 = findLeaderRep(state, 2);
+  const roll1 = rollVsRep(rep1);
+  const roll2 = rollVsRep(rep2);
+  const pass1 = roll1.passed;
+  const pass2 = roll2.passed;
+
+  let activePlayer;
+  if (pass1 > pass2) activePlayer = 1;
+  else if (pass2 > pass1) activePlayer = 2;
+  else if (rep1 > rep2) activePlayer = 1;
+  else if (rep2 > rep1) activePlayer = 2;
+  else activePlayer = findMovingPlayerId(state);
+
+  const inactivePlayer = (activePlayer === 1) ? 2 : 1;
+  const initRoll = { rep1, rep2, roll1, roll2, pass1, pass2, activePlayer, inactivePlayer };
+
+  const newPlayers = { ...state.players };
+
+  newPlayers.byId[activePlayer].active = true;
+  newPlayers.byId[inactivePlayer].active = false;
+
+  return { ...state,
+   phase: 2,
+   initRoll,
+   players: { ...state.players, byId: newPlayers },
+ };
 };
+
+const initEndReducer = (state) => ({ ...state, turn: 1, phase: 0 });
 
 //  [decrement]: (state) => state - 1,
 //  [add]: (state, payload) => state + payload,
 const gameReducer = createReducer({
   [randomInit]: randomInitReducer,
   [rollForInitiative]: rollForInitiativeReducer,
+  [initEnd]: initEndReducer,
 },
-{ figures: [],
-  turn: 0,
-  phase: 0,
-   }
+{ turn: 0, phase: 0 }
   );
 
 export default gameReducer;
