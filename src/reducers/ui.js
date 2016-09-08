@@ -1,15 +1,20 @@
 import { createReducer } from 'redux-act';
 
-import { selectAttackSource } from '../actionCreators';
+import { selectAttackSource, selectAttackTarget } from '../actionCreators';
 
-const selectAttackSourceReducer = (state, payload) => ({ ...state, selected: payload });
+export const getAttackSource = (state) => state.attackSource || null;
+export const getAttackTarget = (state) => state.attackTarget || null;
+
+const selectAttackSourceReducer = (state, payload) => ({ ...state, attackSource: payload });
+const selectAttackTargetReducer = (state, payload) => ({ ...state, attackTarget: payload });
 
 const uiReducer = createReducer({
   [selectAttackSource]: selectAttackSourceReducer,
+  [selectAttackTarget]: selectAttackTargetReducer,
 },
   {
-    selected: undefined,
-    attack: [],
+    attackSource: undefined,
+    attackTarget: undefined,
   }
 );
 

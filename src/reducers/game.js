@@ -7,6 +7,7 @@ export const getFigures = (state) => state.figures.allIds.map(id => state.figure
 export const getPlayerFigures =
   (state, playerId) => getFigures(state).filter(f => f.player === playerId);
 export const getTurn = (state) => state.turn;
+export const getActivePlayer = (state) => state.activePlayer || 0;
 export const getPhase = (state) => state.phase;
 export const getPlayers = (state) => state.players.allIds.map(id => state.players.byId[id]);
 export const getInitRoll = (state) => state.initRoll;

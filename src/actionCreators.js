@@ -4,3 +4,4 @@ export const randomInit = createAction('RANDOM_INIT');
 export const rollForInitiative = createAction('ROLL_FOR_INITIATIVE');
 export const initEnd = createAction('INIT_END');
 export const selectAttackSource = createAction('SELECT_ATTACK_SOURCE');
+export const selectAttackTarget = createAction('SELECT_ATTACK_TARGET');
