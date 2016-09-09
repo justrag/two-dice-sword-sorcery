@@ -5,13 +5,12 @@ import PhaseBar from '../components/PhaseBar';
 import FigureRow from '../containers/FigureRow';
 
 import {
-  getTurn,
   getPhase,
   getActivePlayer,
   } from '../reducers';
 
-const PlayBoard = ({ turn, phase, activePlayer }) => (
-  <div><h3>Turn: {turn}</h3>
+const PlayBoard = ({ phase, activePlayer }) => (
+  <div>
     <PhaseBar step={phase} />
     <h2 style={(activePlayer === 1) ? { border: 'thick solid black' } : {}}>Player 1</h2>
     <FigureRow playerId={1} />
@@ -23,7 +22,6 @@ const PlayBoard = ({ turn, phase, activePlayer }) => (
 
 const mapStateToProps = (state) => (
   {
-    turn: getTurn(state),
     phase: getPhase(state),
     activePlayer: getActivePlayer(state),
   }

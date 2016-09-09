@@ -10,7 +10,7 @@ export const getPhase = (state) => fromGame.getPhase(state.game);
 export const getActivePlayer = (state) => fromGame.getActivePlayer(state.game);
 export const getInitRoll = (state) => fromGame.getInitRoll(state.game);
 export const getAttackSource = (state) => fromUi.getAttackSource(state.ui);
-export const getAttackTarget = (state) => fromUi.getAttackTarget(state.ui);
+export const getSelection = (state) => fromUi.getSelection(state.ui);
 
 const bulbaReducer = (state, payload) => {
   console.debug('state, payload: %o %o', state, payload);
