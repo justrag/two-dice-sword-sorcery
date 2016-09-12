@@ -5,6 +5,8 @@ import { selectAttackSource, selectAttackTarget } from '../actionCreators';
 export const getAttackSource = (state) => state.attackSource || null;
 export const getSelection = (state) => state.selection;
 
+export const isAttackSelectionComplete = (state) => state.selection.
+
 const selectAttackSourceReducer = (state, payload) => ({ ...state, attackSource: payload });
 // const selectAttackTargetReducer = (state, payload) => ({ ...state, attackTarget: payload });
 const selectAttackTargetReducer = (state, payload) =>
