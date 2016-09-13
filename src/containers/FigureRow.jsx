@@ -13,7 +13,8 @@ const FigureRow = ({ turn, phase, active, attackSource, attackTarget, selectAtta
     {figures.map(f => {
       const sel = active && attackSource === f.id;
       const target = attackTarget[f.id];
-      const handler = (active) ? selectAttackSource : selectAttackTarget;
+      let handler = () => {};
+      if (turn > 0) handler = (active) ? selectAttackSource : selectAttackTarget;
       return <Figure key={f.id} sel={sel} target={target} handler={handler} {...f} />;
     }
       )}

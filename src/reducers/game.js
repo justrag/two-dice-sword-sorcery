@@ -8,9 +8,15 @@ export const getPlayerFigures =
   (state, playerId) => getFigures(state).filter(f => f.player === playerId);
 export const getTurn = (state) => state.turn;
 export const getActivePlayer = (state) => state.activePlayer || 0;
+export const getInactivePlayer = (state) => 3 - state.activePlayer; // 1->2, 2->1
 export const getPhase = (state) => state.phase;
 export const getPlayers = (state) => state.players.allIds.map(id => state.players.byId[id]);
 export const getInitRoll = (state) => state.initRoll;
+
+export const getActiveFiguresCount =
+  (state) => getPlayerFigures(state, getActivePlayer(state)).length;
+export const getInactiveFiguresCount =
+  (state) => getPlayerFigures(state, getInactivePlayer(state)).length;
 
 const findMovingPlayer = (state) => getPlayers(state).filter(p => p.moving)[0];
 const findMovingPlayerId = (state) => findMovingPlayer(state).id;
