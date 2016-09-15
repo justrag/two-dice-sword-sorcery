@@ -1,8 +1,9 @@
 import { createReducer } from 'redux-act';
-import { randomInit, rollForInitiative, initEnd } from '../actionCreators';
+import { randomInit, rollForInitiative, initEnd, attack } from '../actionCreators';
 
 import { rollVsRep } from '../game_utils';
 
+export const getFiguresById = (state) => state.figures.byId;
 export const getFigures = (state) => state.figures.allIds.map(id => state.figures.byId[id]);
 export const getPlayerFigures =
   (state, playerId) => getFigures(state).filter(f => f.player === playerId);
@@ -89,12 +90,15 @@ const rollForInitiativeReducer = (state) => {
 
 const initEndReducer = (state) => ({ ...state, turn: 1, phase: 0 });
 
+const attackReducer = (state, payload) => ({  ...state, phase: 2, attack: payload });
+
 //  [decrement]: (state) => state - 1,
 //  [add]: (state, payload) => state + payload,
 const gameReducer = createReducer({
   [randomInit]: randomInitReducer,
   [rollForInitiative]: rollForInitiativeReducer,
   [initEnd]: initEndReducer,
+  [attack]: attackReducer,
 },
 { turn: 0, phase: 0 }
   );
