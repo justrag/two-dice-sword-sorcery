@@ -17,12 +17,13 @@ const FigureRow = ({ turn, phase, active, attackSource, selection, selectAttackS
       if (turn > 0) handler = active ? selectAttackSource : selectAttackTarget;
       if (turn > 0) bulba = active ? 'selectAttackSource' : 'selectAttackTarget';
       const sel = attackSource === f.id;
+      console.debug("f: %o", f); // FIXME: prepareFigures sometimes generates array with 1 undefined element
       return (
         <div key={f.id}>
           <span>{bulba}</span>
           <Figure key={f.id} sel={sel} handler={handler} {...f} />
-          <span>Attackers:</span>
-          {f.attackers.map(a =>
+          {(f.attackers.length !== 0) ? <span>Attackers:</span> : ''}
+          { f.attackers.map(a =>
             <Figure key={a.id} sel={attackSource === a.id} handler={selectAttackSource} {...a} />)}
         </div>
         );
@@ -44,12 +45,12 @@ const prepareFigures = (state, playerId) => {
   return playerFigures
          .filter(pf => (!active || !sources.includes(pf.id))) // remove attacking
          .map(f => (
-          { ...f,
-           attackers: Object.keys(selection).filter(s => selection[s] === f.id)
-                       .map(sf => allFiguresById[sf.id]),
-         }
-         )
-         );
+           { ...f,
+            attackers: Object.keys(selection)
+                             .filter(s => selection[s] === f.id)
+                             .map(sf => allFiguresById[sf.id]),
+           }
+            ));
 };
 
 const mapStateToProps = (state, ownProps) => ({
