@@ -22,14 +22,14 @@ const FigureRow = ({ turn, phase, active, attackSource, selection, selectAttackS
         <div key={f.id}>
           <span>{bulba}</span>
           <Figure key={f.id} sel={sel} handler={handler} {...f} />
-          {(f.attackers.length !== 0) ? <span>Attackers:</span> : ''}
-          { f.attackers.map(a =>
-            <Figure key={a.id} sel={attackSource === a.id} handler={selectAttackSource} {...a} />)}
+          {f.attackers ? <span>Attackers:</span> : ''}
+          {f.attackers.map(a => <Figure key={a.id} sel={attackSource === a.id} handler={selectAttackSource} {...a} />)}
         </div>
         );
     })}
   </div>
   );
+
 
 const amIActivePlayer =
   (state, playerId) => getActivePlayer(state) === playerId;
@@ -42,13 +42,26 @@ const prepareFigures = (state, playerId) => {
 
   const sources = getAssignedAttacks(state);
 
+console.debug('active: %o, sources: %o', active, sources);
+
   return playerFigures
-         .filter(pf => (!active || !sources.includes(pf.id))) // remove attacking
+/*         .filter(pf => (!active || !sources.includes(pf.id))) // remove attacking*/
+         .filter(pf => {
+          console.debug("pf.id: %o, sources.includes(pf.id): %o",pf.id, sources.includes(pf.id));
+          return (!active || !sources.includes(pf.id));
+         })
          .map(f => (
            { ...f,
             attackers: Object.keys(selection)
-                             .filter(s => selection[s] === f.id)
-                             .map(sf => allFiguresById[sf.id]),
+                            .reduce((atkArr, s) => {
+                              console.debug('atkArr: %o, s: %o, f.id: %o', atkArr, s, f.id);
+                              if (selection[s] === f.id) {
+                                atkArr.push(allFiguresById[s]);
+                              }
+                              return atkArr;
+                            }, []),
+                             // .filter(s => selection[s] === f.id)
+                             // .map(sf => allFiguresById[sf.id]),
            }
             ));
 };
