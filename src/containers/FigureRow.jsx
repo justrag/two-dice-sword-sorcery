@@ -11,7 +11,7 @@ import {
   } from '../actionCreators';
 
 const FigureRow = ({ turn, phase, active, attackSource, selection, selectAttackSource, selectAttackTarget, figures, upOrDown }) => (
-  <div className="figure_row" style={{ display: 'flex' }}>
+  <div className="figure_row" style={{ color: upOrDown ? 'red' : 'green', display: 'flex' }}>
     {figures.map(f => {
       let handler = () => {};
       if (turn > 0) handler = active ? selectAttackSource : selectAttackTarget;
