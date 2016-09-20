@@ -19,6 +19,8 @@ export const getActiveFiguresCount =
 export const getInactiveFiguresCount =
   (state) => getPlayerFigures(state, getInactivePlayer(state)).length;
 
+export const getAttack = (state) => state.attack;
+
 const findMovingPlayer = (state) => getPlayers(state).filter(p => p.moving)[0];
 const findMovingPlayerId = (state) => findMovingPlayer(state).id;
 
