@@ -1,5 +1,5 @@
 import { createReducer } from 'redux-act';
-import { randomInit, rollForInitiative, initEnd, attack } from '../actionCreators';
+import { randomInit, rollForInitiative, initEnd, attack, attackClass } from '../actionCreators';
 
 import { rollVsRep } from '../game_utils';
 
@@ -20,6 +20,7 @@ export const getInactiveFiguresCount =
   (state) => getPlayerFigures(state, getInactivePlayer(state)).length;
 
 export const getAttack = (state) => state.attack;
+export const getClassOrder = (state) => state.classOrder;
 
 const findMovingPlayer = (state) => getPlayers(state).filter(p => p.moving)[0];
 const findMovingPlayerId = (state) => findMovingPlayer(state).id;
@@ -92,7 +93,9 @@ const rollForInitiativeReducer = (state) => {
 
 const initEndReducer = (state) => ({ ...state, turn: 1, phase: 0 });
 
-const attackReducer = (state, payload) => ({  ...state, phase: 2, attack: payload });
+const attackReducer = (state, payload) => ({  ...state, phase: 1, classOrder: 0, attack: payload });
+
+const attackClassReducer = (state, payload) => ({  ...state, classOrder: payload });
 
 //  [decrement]: (state) => state - 1,
 //  [add]: (state, payload) => state + payload,
@@ -101,6 +104,7 @@ const gameReducer = createReducer({
   [rollForInitiative]: rollForInitiativeReducer,
   [initEnd]: initEndReducer,
   [attack]: attackReducer,
+  [attackClass]: attackClassReducer,
 },
 { turn: 0, phase: 0 }
   );

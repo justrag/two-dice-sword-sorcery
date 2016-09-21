@@ -24,7 +24,6 @@ export const getAssignedTargetsCount = (state) => getAssignedUniqueTargets(state
 export const attackDoubledUp = (state) => {
   const targets = getAssignedTargets(state);
   const uniqueTargets = new Set(targets);
-  console.log(`Double up?: ${targets.length} ? ${uniqueTargets.size}`);
   return (targets.length !== uniqueTargets.size);
 };
 

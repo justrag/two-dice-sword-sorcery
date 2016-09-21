@@ -14,14 +14,17 @@ const FigureRow = ({ turn, phase, active, attackSource, selection, selectAttackS
   <div className="figure_row" style={{ color: upOrDown ? 'red' : 'green', display: 'flex' }}>
     {figures.map(f => {
       let handler = () => {};
-      if (turn > 0) handler = active ? selectAttackSource : selectAttackTarget;
+      if (turn > 0) {
+        if (active) handler = selectAttackSource;
+        if (!active && attackSource) handler = selectAttackTarget;
+      }
       const sel = attackSource === f.id;
       return (
-        <div key={f.id} style={{ display: 'flex', 'flex-direction': 'column', 'justify-content': (upOrDown) ? 'flex-start' : 'flex-end' }}>
+        <div key={f.id} style={{ display: 'flex', flexDirection: 'column', justifyContent: (upOrDown) ? 'flex-start' : 'flex-end' }}>
           <div style={{ order: 2 }} >
             <Figure key={f.id} sel={sel} handler={handler} {...f} />
           </div>
-          <div style={{ display: 'flex', 'flex-direction': 'column', order: (upOrDown ? 3 : 1) }} >
+          <div style={{ display: 'flex', flexDirection: 'column', order: (upOrDown ? 3 : 1) }} >
             <div style={{ order: (upOrDown ? 1 : 3) }} >
               {(f.attackers.length === 0) ? '' : (upOrDown ? '↑' : '↓')}
             </div>
@@ -46,26 +49,19 @@ const prepareFigures = (state, playerId) => {
 
   const sources = getAssignedAttacks(state);
 
-  console.debug('active: %o, sources: %o', active, sources);
-
   return playerFigures
-/*         .filter(pf => (!active || !sources.includes(pf.id))) // remove attacking*/
          .filter(pf => {
-           console.debug('pf.id: %o, sources.includes(pf.id): %o', pf.id, sources.includes(pf.id));
            return (!active || !sources.includes(String(pf.id)));
          })
          .map(f => (
            { ...f,
             attackers: Object.keys(selection)
                             .reduce((atkArr, s) => {
-                              console.debug('atkArr: %o, s: %o, f.id: %o', atkArr, s, f.id);
                               if (selection[s] === f.id) {
                                 atkArr.push(allFiguresById[s]);
                               }
                               return atkArr;
                             }, []),
-                             // .filter(s => selection[s] === f.id)
-                             // .map(sf => allFiguresById[sf.id]),
            }
             ));
 };
