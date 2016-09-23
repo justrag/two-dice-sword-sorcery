@@ -1,6 +1,6 @@
 import { createReducer } from 'redux-act';
 
-import { selectAttackSource, selectAttackTarget } from '../actionCreators';
+import { selectAttackSource, selectAttackTarget, selectCurrent } from '../actionCreators';
 
 export const getAttackSource = (state) => state.attackSource || null;
 export const getSelection = (state) => state.selection;
@@ -27,6 +27,8 @@ export const attackDoubledUp = (state) => {
   return (targets.length !== uniqueTargets.size);
 };
 
+export const getAttackFigure = (state) => state.attackFigure;
+
 const selectAttackSourceReducer = (state, payload) => ({ ...state, attackSource: payload });
 // const selectAttackTargetReducer = (state, payload) => ({ ...state, attackTarget: payload });
 const selectAttackTargetReducer = (state, payload) =>
@@ -37,9 +39,12 @@ const selectAttackTargetReducer = (state, payload) =>
   }
   );
 
+const selectCurrentReducer = (state, payload) => ({ ...state, attackFigure: payload });
+
 const uiReducer = createReducer({
   [selectAttackSource]: selectAttackSourceReducer,
   [selectAttackTarget]: selectAttackTargetReducer,
+  [selectCurrent]: selectCurrentReducer,
 },
   {
     attackSource: undefined,

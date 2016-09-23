@@ -1,5 +1,5 @@
 import { createReducer } from 'redux-act';
-import { randomInit, rollForInitiative, initEnd, attack, attackClass } from '../actionCreators';
+import { randomInit, rollForInitiative, initEnd, attack, attackClass, figureAttacks } from '../actionCreators';
 
 import { rollVsRep } from '../game_utils';
 
@@ -22,6 +22,12 @@ export const getInactiveFiguresCount =
 export const getAttack = (state) => state.attack;
 export const getClassOrder = (state) => state.classOrder;
 
+export const getNotActivatedCasters =
+ (state) => getPlayerFigures(state, getActivePlayer(state))
+            .filter(f => f.chclass === 'Caster')
+            .filter(f => !f.activated)
+            .length;
+
 const findMovingPlayer = (state) => getPlayers(state).filter(p => p.moving)[0];
 const findMovingPlayerId = (state) => findMovingPlayer(state).id;
 
@@ -38,12 +44,14 @@ const randomInitReducer = (state) => {
       1: { id: 1, player: 1, type: 'STAR', chclass: 'Caster', rep: 5, ac: 6 },
       2: { id: 2, player: 1, type: 'GRUNT', chclass: 'Missile', rep: 4, ac: 4 },
       3: { id: 3, player: 1, type: 'GRUNT', chclass: 'Melee', rep: 3, ac: 6 },
+      4: { id: 4, player: 1, type: 'GRUNT', chclass: 'Caster', rep: 4, ac: 2 },
+      5: { id: 5, player: 1, type: 'GRUNT', chclass: 'Caster', rep: 4, ac: 4 },
       11: { id: 11, player: 2, type: 'STAR', chclass: 'Caster', rep: 5, ac: 4 },
       12: { id: 12, player: 2, type: 'GRUNT', chclass: 'Missile', rep: 4, ac: 4 },
       13: { id: 13, player: 2, type: 'GRUNT', chclass: 'Missile', rep: 3, ac: 2 },
       14: { id: 14, player: 2, type: 'GRUNT', chclass: 'Melee', rep: 3, ac: 6 },
     },
-    allIds: [1, 2, 3, 11, 12, 13, 14],
+    allIds: [1, 2, 3, 4, 5, 11, 12, 13, 14],
   };
 
   const players = {
@@ -93,9 +101,11 @@ const rollForInitiativeReducer = (state) => {
 
 const initEndReducer = (state) => ({ ...state, turn: 1, phase: 0 });
 
-const attackReducer = (state, payload) => ({  ...state, phase: 1, classOrder: 0, attack: payload });
+const attackReducer = (state, payload) => ({  ...state, phase: 1, attack: payload });
 
 const attackClassReducer = (state, payload) => ({  ...state, classOrder: payload });
+
+const figureAttacksReducer = (state, payload) => ({  ...state, classOrder: payload });
 
 //  [decrement]: (state) => state - 1,
 //  [add]: (state, payload) => state + payload,
@@ -105,6 +115,7 @@ const gameReducer = createReducer({
   [initEnd]: initEndReducer,
   [attack]: attackReducer,
   [attackClass]: attackClassReducer,
+  [figureAttacks]: figureAttacksReducer,
 },
 { turn: 0, phase: 0 }
   );

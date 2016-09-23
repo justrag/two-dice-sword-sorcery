@@ -23,6 +23,9 @@ export const getAssignedTargetsCount = (state) => fromUi.getAssignedTargetsCount
 export const getAttack = (state) => fromGame.getAttack(state.game);
 export const getClassOrder = (state) => fromGame.getClassOrder(state.game);
 
+export const getNotActivatedCasters = (state) => fromGame.getNotActivatedCasters(state.game);
+export const getAttackFigure = (state) => fromUi.getAttackFigure(state.ui);
+
 const bulbaReducer = (state, payload) => {
   console.debug('state, payload: %o %o', state, payload);
   return Date.now();
