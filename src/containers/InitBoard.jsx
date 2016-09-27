@@ -1,8 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import Divider from 'material-ui/Divider';
-import { getPhase, getInitRoll, getPlayerFigures, getActivePlayer } from '../reducers/';
+import Paper from 'material-ui/Paper';
+import { getPhase, getInitRoll } from '../reducers/';
 import ActionButton from '../components/ActionButton';
+import PlayerBar from '../containers/PlayerBar';
 import InitRollDescription from '../components/InitRollDescription';
 import FigureRow from '../containers/FigureRow';
 
@@ -10,52 +11,38 @@ import {
   rollForInitiative as rollForInitiativeActionCreator,
   initEnd as initEndCreator,
   } from '../actionCreators';
-// import * as actions from '../actionCreators';
-// const { randomInit, rollForInitiative } = actions;
 
 const InitBoard =
-({ phase, initRoll, rollForInitiative, initEnd, figures1, figures2, activePlayer }) => {
-  let cont;
-  if (phase === 1) cont = <ActionButton label="Roll for Initiative" action={rollForInitiative} />;
-  else {
-    cont = (
-      <div>
-        <InitRollDescription {...initRoll} />
-        <ActionButton label="Let's start!" action={initEnd} />
-      </div>
-      );
-  }
-  return (
+({ phase, initRoll, rollForInitiative, initEnd }) => (
+  <div className="initBoard">
     <div>
-      <div>
-        <h2 style={(activePlayer === 1) ? { border: 'thick solid black' } : {}}>Player 1</h2>
-        <FigureRow playerId={1} />
-        <Divider />
-        <h2 style={(activePlayer === 2) ? { border: 'thick solid black' } : {}}>Player 2</h2>
-        <FigureRow playerId={2} />
-      </div>
-      <div>
-        { cont }
-      </div>
+      <PlayerBar playerId={1} />
+      <FigureRow playerId={1} />
+      <hr />
+      <FigureRow playerId={2} />
+      <PlayerBar playerId={2} />
     </div>
-    );
-};
+    <div>
+      { (phase === 1) ?
+        <ActionButton label="Roll for Initiative" action={rollForInitiative} /> :
+        <div>
+          <Paper style={{ padding: 20, margin: 5 }}><InitRollDescription {...initRoll} /></Paper>
+          <ActionButton label="Start turn 1" action={initEnd} />
+        </div>
+      }
+    </div>
+  </div>
+  );
 InitBoard.propTypes = {
   phase: React.PropTypes.number.isRequired,
   initRoll: React.PropTypes.object,
   rollForInitiative: React.PropTypes.func.isRequired,
   initEnd: React.PropTypes.func.isRequired,
-  figures1: React.PropTypes.array,
-  figures2: React.PropTypes.array,
-  activePlayer: React.PropTypes.number.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   phase: getPhase(state),
   initRoll: getInitRoll(state),
-  figures1: getPlayerFigures(state, 1),
-  figures2: getPlayerFigures(state, 2),
-  activePlayer: getActivePlayer(state),
 });
 
 export default connect(mapStateToProps, {

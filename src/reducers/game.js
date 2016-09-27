@@ -1,5 +1,10 @@
 import { createReducer } from 'redux-act';
-import { randomInit, rollForInitiative, initEnd, attack, attackClass, figureAttacks } from '../actionCreators';
+import { randomInit,
+         rollForInitiative,
+         initEnd,
+         movementEnd,
+         attackClass,
+         figureAttacks } from '../actionCreators';
 
 import { rollVsRep } from '../game_utils';
 
@@ -8,10 +13,14 @@ export const getFigures = (state) => state.figures.allIds.map(id => state.figure
 export const getPlayerFigures =
   (state, playerId) => getFigures(state).filter(f => f.player === playerId);
 export const getTurn = (state) => state.turn;
-export const getActivePlayer = (state) => state.activePlayer || 0;
+export const getActivePlayer = (state) => state.activePlayer;
 export const getInactivePlayer = (state) => 3 - state.activePlayer; // 1->2, 2->1
-export const getPhase = (state) => state.phase;
+export const isPlayerActive = (state, playerId) => getActivePlayer(state) === playerId;
 export const getPlayers = (state) => state.players.allIds.map(id => state.players.byId[id]);
+export const getMovingPlayer = (state) => state.movingPlayer;
+export const isPlayerMoving = (state, playerId) => getMovingPlayer(state) === playerId;
+export const getPlayerName = (state, playerId) => state.players.byId[playerId].name;
+export const getPhase = (state) => state.phase;
 export const getInitRoll = (state) => state.initRoll;
 
 export const getActiveFiguresCount =
@@ -27,9 +36,6 @@ export const getNotActivatedCasters =
             .filter(f => f.chclass === 'Caster')
             .filter(f => !f.activated)
             .length;
-
-const findMovingPlayer = (state) => getPlayers(state).filter(p => p.moving)[0];
-const findMovingPlayerId = (state) => findMovingPlayer(state).id;
 
 const findLeaderRep = (state, playerId) => {
   const figs = getPlayerFigures(state, playerId);
@@ -56,8 +62,8 @@ const randomInitReducer = (state) => {
 
   const players = {
     byId: {
-      1: { id: 1, type: 'HUMAN', moving: true, name: 'Human player' },
-      2: { id: 2, type: 'COMPUTER', moving: false, name: 'AI player' },
+      1: { id: 1, type: 'HUMAN', name: 'Human player' },
+      2: { id: 2, type: 'COMPUTER', name: 'AI player' },
     },
     allIds: [1, 2],
   };
@@ -67,6 +73,7 @@ const randomInitReducer = (state) => {
     phase: 1,
     figures,
     players,
+    movingPlayer: 1,
   };
 };
 
@@ -83,7 +90,7 @@ const rollForInitiativeReducer = (state) => {
   else if (pass2 > pass1) startingPlayer = 2;
   else if (rep1 > rep2) startingPlayer = 1;
   else if (rep2 > rep1) startingPlayer = 2;
-  else startingPlayer = findMovingPlayerId(state);
+  else startingPlayer = getMovingPlayer(state);
 
   const initRoll = { rep1, rep2, roll1, roll2, startingPlayer };
 
@@ -101,11 +108,11 @@ const rollForInitiativeReducer = (state) => {
 
 const initEndReducer = (state) => ({ ...state, turn: 1, phase: 0 });
 
-const attackReducer = (state, payload) => ({  ...state, phase: 1, attack: payload });
+const movementEndReducer = (state, payload) => ({ ...state, phase: 1, attack: payload });
 
-const attackClassReducer = (state, payload) => ({  ...state, classOrder: payload });
+const attackClassReducer = (state, payload) => ({ ...state, classOrder: payload });
 
-const figureAttacksReducer = (state, payload) => ({  ...state, classOrder: payload });
+const figureAttacksReducer = (state, payload) => ({ ...state, classOrder: payload });
 
 //  [decrement]: (state) => state - 1,
 //  [add]: (state, payload) => state + payload,
@@ -113,7 +120,7 @@ const gameReducer = createReducer({
   [randomInit]: randomInitReducer,
   [rollForInitiative]: rollForInitiativeReducer,
   [initEnd]: initEndReducer,
-  [attack]: attackReducer,
+  [movementEnd]: movementEndReducer,
   [attackClass]: attackClassReducer,
   [figureAttacks]: figureAttacksReducer,
 },

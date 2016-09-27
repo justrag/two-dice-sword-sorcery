@@ -1,12 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import Paper from 'material-ui/Paper';
 import ActionButton from '../components/ActionButton';
 import FigureRow from '../containers/FigureRow';
+import PlayerBar from '../containers/PlayerBar';
 
 import {
   getPhase,
   getSelection,
-  getActivePlayer,
   getActiveFiguresCount,
   getAssignedAttacksCount,
   getInactiveFiguresCount,
@@ -15,21 +16,41 @@ import {
   } from '../reducers';
 
 import {
-  attack as attackCreator,
+  movementEnd as movementEndCreator,
   } from '../actionCreators';
 
-const MovementBoard = ({ phase, selection, activePlayer, attack, displayAttackButton, displayAssignNotice, displayDoubleUpNotice }) => (
+const MovementBoard = ({
+  selection,
+  displayMovementEndButton,
+  displayAssignNotice,
+  displayDoubleUpNotice,
+  movementEnd,
+   }) => (
   <div>
-    <h2 style={{ color: 'red', border: (activePlayer === 1) ? 'thick solid darkred' : '' }}>Player 1</h2>
+    <PlayerBar playerId={1} />
     <FigureRow playerId={1} />
     <hr />
     <FigureRow playerId={2} />
-    <h2 style={{ color: 'green', border: (activePlayer === 2) ? 'thick solid darkgreen' : '' }}>Player 2</h2>
-     { displayAttackButton ? <ActionButton label="Attack!" action={() => attack(selection)} /> : ''}
-    { displayAssignNotice ? <div>Still some attackers to assign!</div> : ''}
-    { displayDoubleUpNotice ? <div>All defending figures must be targeted before doubling up!</div> : ''}
+    <PlayerBar playerId={2} />
+    { displayAssignNotice
+      && <Paper style={{ padding: 20, margin: 5 }}>
+      Still some attackers to assign!
+      </Paper> }
+    { displayDoubleUpNotice
+      && <Paper style={{ padding: 20, margin: 5 }}>
+      All defending figures must be targeted before doubling up!
+      </Paper> }
+    { displayMovementEndButton
+      && <ActionButton label="Proceed to attack phase" action={() => movementEnd(selection)} /> }
   </div>
 );
+MovementBoard.propTypes = {
+  selection: React.PropTypes.object.isRequired,
+  displayMovementEndButton: React.PropTypes.bool.isRequired,
+  displayAssignNotice: React.PropTypes.bool.isRequired,
+  displayDoubleUpNotice: React.PropTypes.bool.isRequired,
+  movementEnd: React.PropTypes.func.isRequired,
+};
 
 const allAttacksAssigned =
   (state) => (getActiveFiguresCount(state) === getAssignedAttacksCount(state));
@@ -42,13 +63,11 @@ const attackSelectionReady = (state) =>
 
 const mapStateToProps = (state) => (
   {
-    phase: getPhase(state),
     selection: getSelection(state),
-    activePlayer: getActivePlayer(state),
-    displayAttackButton: attackSelectionReady(state),
+    displayMovementEndButton: attackSelectionReady(state),
     displayAssignNotice: !allAttacksAssigned(state),
     displayDoubleUpNotice: illegalDoublingUp(state),
   }
   );
 
-export default connect(mapStateToProps, { attack: attackCreator })(MovementBoard);
+export default connect(mapStateToProps, { movementEnd: movementEndCreator })(MovementBoard);

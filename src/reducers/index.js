@@ -26,6 +26,10 @@ export const getClassOrder = (state) => fromGame.getClassOrder(state.game);
 export const getNotActivatedCasters = (state) => fromGame.getNotActivatedCasters(state.game);
 export const getAttackFigure = (state) => fromUi.getAttackFigure(state.ui);
 
+export const isPlayerActive = (state, playerId) => fromGame.isPlayerActive(state.game, playerId);
+export const isPlayerMoving = (state, playerId) => fromGame.isPlayerMoving(state.game, playerId);
+export const getPlayerName = (state, playerId) => fromGame.getPlayerName(state.game, playerId);
+
 const bulbaReducer = (state, payload) => {
   console.debug('state, payload: %o %o', state, payload);
   return Date.now();

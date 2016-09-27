@@ -1,10 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Figure from '../components/Figure';
-import { getTurn, getPhase, getPlayerFigures, getFiguresById, getActivePlayer,
+import { getTurn, getPhase, getPlayerFigures, getFiguresById,
  getAssignedAttacks,
  getAttackSource, getSelection,
- getAttackFigure, getClassOrder } from '../reducers/';
+ getAttackFigure, getClassOrder,
+ isPlayerActive } from '../reducers/';
 import {
  selectAttackSource as selectAttackSourceCreator,
  selectAttackTarget as selectAttackTargetCreator,
@@ -67,11 +68,8 @@ const FigureRow = ({ turn, phase, active,
   </div>
   );
 
-const amIActivePlayer =
-  (state, playerId) => getActivePlayer(state) === playerId;
-
 const prepareFigures = (state, playerId) => {
-  const active = amIActivePlayer(state, playerId);
+  const active = isPlayerActive(state, playerId);
   const playerFigures = getPlayerFigures(state, playerId);
   const selection = getSelection(state);
   const allFiguresById = getFiguresById(state);
@@ -96,7 +94,7 @@ const prepareFigures = (state, playerId) => {
 const mapStateToProps = (state, ownProps) => ({
   turn: getTurn(state),
   phase: getPhase(state),
-  active: amIActivePlayer(state, ownProps.playerId),
+  active: isPlayerActive(state, ownProps.playerId),
   attackSource: getAttackSource(state),
   figures: prepareFigures(state, ownProps.playerId),
   upOrDown: ownProps.playerId === 1,
