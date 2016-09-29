@@ -5,7 +5,7 @@ import { getPhase, getInitRoll } from '../reducers/';
 import ActionButton from '../components/ActionButton';
 import PlayerBar from '../containers/PlayerBar';
 import InitRollDescription from '../components/InitRollDescription';
-import FigureRow from '../containers/FigureRow';
+import InitFigureRow from '../containers/InitFigureRow';
 
 import {
   rollForInitiative as rollForInitiativeActionCreator,
@@ -17,9 +17,9 @@ const InitBoard =
   <div className="initBoard">
     <div>
       <PlayerBar playerId={1} />
-      <FigureRow playerId={1} />
+      <InitFigureRow playerId={1} />
       <hr />
-      <FigureRow playerId={2} />
+      <InitFigureRow playerId={2} />
       <PlayerBar playerId={2} />
     </div>
     <div>

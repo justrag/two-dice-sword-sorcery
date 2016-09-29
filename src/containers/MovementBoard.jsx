@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Paper from 'material-ui/Paper';
 import ActionButton from '../components/ActionButton';
-import FigureRow from '../containers/FigureRow';
+import InitFigureRow from '../containers/InitFigureRow';
 import PlayerBar from '../containers/PlayerBar';
 
 import {
@@ -28,9 +28,9 @@ const MovementBoard = ({
    }) => (
   <div>
     <PlayerBar playerId={1} />
-    <FigureRow playerId={1} />
+    <InitFigureRow playerId={1} />
     <hr />
-    <FigureRow playerId={2} />
+    <InitFigureRow playerId={2} />
     <PlayerBar playerId={2} />
     { displayAssignNotice
       && <Paper style={{ padding: 20, margin: 5 }}>

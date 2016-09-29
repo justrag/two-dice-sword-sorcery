@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { getClassOrder, getNotActivatedCasters, getAttackFigure } from '../reducers';
 import ClassOrderBar from '../components/ClassOrderBar';
 import ActionButton from '../components/ActionButton';
-import FigureRow from '../containers/FigureRow';
+import InitFigureRow from '../containers/InitFigureRow';
 import PlayerBar from '../containers/PlayerBar';
 
 import {
@@ -23,9 +23,9 @@ const AttackBoard = ({
     {(classOrder === 0 && notActivatedCasters > 0) && <div>Choose a caster!</div> }
     <div>
       <PlayerBar playerId={1} />
-      <FigureRow playerId={1} />
+      <InitFigureRow playerId={1} />
       <hr />
-      <FigureRow playerId={2} />
+      <InitFigureRow playerId={2} />
       <PlayerBar playerId={2} />
     </div>
     { attackFigure &&

@@ -47,15 +47,15 @@ const findLeaderRep = (state, playerId) => {
 const randomInitReducer = (state) => {
   const figures = {
     byId: {
-      1: { id: 1, player: 1, type: 'STAR', chclass: 'Caster', rep: 5, ac: 6 },
-      2: { id: 2, player: 1, type: 'GRUNT', chclass: 'Missile', rep: 4, ac: 4 },
-      3: { id: 3, player: 1, type: 'GRUNT', chclass: 'Melee', rep: 3, ac: 6 },
-      4: { id: 4, player: 1, type: 'GRUNT', chclass: 'Caster', rep: 4, ac: 2 },
-      5: { id: 5, player: 1, type: 'GRUNT', chclass: 'Caster', rep: 4, ac: 4 },
-      11: { id: 11, player: 2, type: 'STAR', chclass: 'Caster', rep: 5, ac: 4 },
-      12: { id: 12, player: 2, type: 'GRUNT', chclass: 'Missile', rep: 4, ac: 4 },
-      13: { id: 13, player: 2, type: 'GRUNT', chclass: 'Missile', rep: 3, ac: 2 },
-      14: { id: 14, player: 2, type: 'GRUNT', chclass: 'Melee', rep: 3, ac: 6 },
+      1: { id: 1, player: 1, type: 'STAR', chclass: 'Caster', rep: 5, ac: 6, name: 'Ddfhsdfhg' },
+      2: { id: 2, player: 1, type: 'GRUNT', chclass: 'Missile', rep: 4, ac: 4, name: 'Isdfseyuye' },
+      3: { id: 3, player: 1, type: 'GRUNT', chclass: 'Melee', rep: 3, ac: 6, name: 'Ogrgrfuyeas' },
+      4: { id: 4, player: 1, type: 'GRUNT', chclass: 'Caster', rep: 4, ac: 2, name: 'Ughj Yt Reytyt' },
+      5: { id: 5, player: 1, type: 'GRUNT', chclass: 'Caster', rep: 4, ac: 4, name: 'Poi Ewrghty' },
+      11: { id: 11, player: 2, type: 'STAR', chclass: 'Caster', rep: 5, ac: 4, name: 'Lsdas' },
+      12: { id: 12, player: 2, type: 'GRUNT', chclass: 'Missile', rep: 4, ac: 4, name: 'Uytqwer' },
+      13: { id: 13, player: 2, type: 'GRUNT', chclass: 'Missile', rep: 3, ac: 2, name: 'Mnhyujgf' },
+      14: { id: 14, player: 2, type: 'GRUNT', chclass: 'Melee', rep: 3, ac: 6, name: 'Bnmethyoju' },
     },
     allIds: [1, 2, 3, 4, 5, 11, 12, 13, 14],
   };
