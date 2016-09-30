@@ -4,8 +4,8 @@ import Figure from '../components/Figure';
 import { getPlayerFigures } from '../reducers/';
 
 const InitFigureRow = ({ figures }) => (
-  <div className="figure_row">
-    {figures.map(f => <Figure key={f.id} name={f.name} chclass={f.chclass} />)}
+  <div className="figure_row" style={{ display: 'flex' }}>
+    {figures.map(f => <Figure key={f.id} name={f.name} chclass={f.chclass} rep={f.rep} ac={f.ac} playerId={f.player} />)}
   </div>
 );
 InitFigureRow.propTypes = {

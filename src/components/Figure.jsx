@@ -1,18 +1,22 @@
 import React from 'react';
-import { Card, CardHeader, CardText } from 'material-ui/Card';
+import Chip from 'material-ui/Chip';
+import Badge from 'material-ui/Badge';
 import Avatar from 'material-ui/Avatar';
+import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import CasterIcon from './CasterIcon';
 import MissileIcon from './MissileIcon';
 import MeleeIcon from './MeleeIcon';
+import RepIcon from './RepIcon';
+import ShieldIcon from './ShieldIcon';
 
 const ClassIcon = ({ chclass }) => {
   switch (chclass) {
     case 'Caster':
-      return <CasterIcon color="black" />;
+      return <CasterIcon color="white" />;
     case 'Missile':
-      return <MissileIcon color="black" />;
+      return <MissileIcon color="white" />;
     case 'Melee':
-      return <MeleeIcon color="black" />;
+      return <MeleeIcon color="white" />;
     default:
       return <span>X</span>;
   }
@@ -21,24 +25,28 @@ ClassIcon.propTypes = {
   chclass: React.PropTypes.oneOf(['Caster', 'Missile', 'Melee']).isRequired,
 };
 
-const Figure = ({ name, chclass }) => (
-  <Card>
+const Figure = ({ name, chclass, rep, ac, playerId }) => (
+  <Card style={{ backgroundColor: (playerId === 1) ? 'darkred' : 'darkgreen', margin: 3 }}>
     <CardHeader
-      title={name}
-      subtitle={chclass}
-      avatar={<Avatar icon={<ClassIcon chclass={chclass} />} />}
+      title={<h3>{name}</h3>}
+      subtitle={<div>
+        <Badge badgeContent={rep}>
+          <RepIcon color="white" />
+        </Badge>
+        <Badge badgeContent={ac}>
+          <ShieldIcon color="white" />
+        </Badge>
+      </div>}
+      avatar={<Avatar backgroundColor={(playerId === 1) ? 'red' : 'green'} icon={<ClassIcon chclass={chclass} />} />}
     />
-    <CardText>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-      Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi.
-      Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque.
-      Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.
-    </CardText>
   </Card>
 );
 Figure.propTypes = {
   name: React.PropTypes.string.isRequired,
   chclass: React.PropTypes.oneOf(['Caster', 'Missile', 'Melee']).isRequired,
+  rep: React.PropTypes.number.isRequired,
+  ac: React.PropTypes.number.isRequired,
+  playerId: React.PropTypes.number.isRequired,
 };
 
 export default Figure;
