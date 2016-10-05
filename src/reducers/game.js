@@ -8,41 +8,47 @@ import { randomInit,
 
 import { rollVsRep } from '../game_utils';
 
-export const getFiguresById = (state) => state.figures.byId;
-export const getFigures = (state) => state.figures.allIds.map(id => state.figures.byId[id]);
-export const getPlayerFigures =
-  (state, playerId) => getFigures(state).filter(f => f.player === playerId);
 export const getTurn = (state) => state.turn;
-export const getActivePlayer = (state) => state.activePlayer;
-export const getInactivePlayer = (state) => 3 - state.activePlayer; // 1->2, 2->1
-export const isPlayerActive = (state, playerId) => getActivePlayer(state) === playerId;
-export const getPlayers = (state) => state.players.allIds.map(id => state.players.byId[id]);
-export const getMovingPlayer = (state) => state.movingPlayer;
-export const isPlayerMoving = (state, playerId) => getMovingPlayer(state) === playerId;
-export const getPlayerName = (state, playerId) => state.players.byId[playerId].name;
 export const getPhase = (state) => state.phase;
 export const getInitRoll = (state) => state.initRoll;
-
+const getFigures = (state) => state.figures.allIds.map(id => state.figures.byId[id]);
+export const getPlayerFigures =
+  (state, playerId) => getFigures(state).filter(f => f.player === playerId);
+const getActivePlayer = (state) => state.activePlayer;
+export const isPlayerActive = (state, playerId) => getActivePlayer(state) === playerId;
 export const getActiveFiguresCount =
   (state) => getPlayerFigures(state, getActivePlayer(state)).length;
+const getInactivePlayer = (state) => 3 - state.activePlayer; // 1->2, 2->1
 export const getInactiveFiguresCount =
   (state) => getPlayerFigures(state, getInactivePlayer(state)).length;
 
-export const getAttack = (state) => state.attack;
-export const getClassOrder = (state) => state.classOrder;
 
-export const getNotActivatedCasters =
- (state) => getPlayerFigures(state, getActivePlayer(state))
-            .filter(f => f.chclass === 'Caster')
-            .filter(f => !f.activated)
-            .length;
-
-const findLeaderRep = (state, playerId) => {
+const getLeaderRep = (state, playerId) => {
   const figs = getPlayerFigures(state, playerId);
   const leaderFig = figs.filter(f => f.type === 'STAR');
   if (leaderFig.length === 1) return leaderFig[0].rep;
   return Math.max(...figs.map(f => f.rep));
 };
+const getMovingPlayer = (state) => state.movingPlayer;
+export const getPlayerName = (state, playerId) => state.players.byId[playerId].name;
+export const isPlayerMoving = (state, playerId) => getMovingPlayer(state) === playerId;
+
+//
+// Are these neeeded?
+//
+// export const getFiguresById = (state) => state.figures.byId;
+// export const getPlayers = (state) => state.players.allIds.map(id => state.players.byId[id]);
+// export const getAttack = (state) => state.attack;
+// export const getClassOrder = (state) => state.classOrder;
+
+// export const getNotActivatedCasters =
+//  (state) => getPlayerFigures(state, getActivePlayer(state))
+//             .filter(f => f.chclass === 'Caster')
+//             .filter(f => !f.activated)
+//             .length;
+
+//
+//
 
 const randomInitReducer = (state) => {
   const figures = {
@@ -78,8 +84,8 @@ const randomInitReducer = (state) => {
 };
 
 const rollForInitiativeReducer = (state) => {
-  const rep1 = findLeaderRep(state, 1);
-  const rep2 = findLeaderRep(state, 2);
+  const rep1 = getLeaderRep(state, 1);
+  const rep2 = getLeaderRep(state, 2);
   const roll1 = rollVsRep(rep1);
   const roll2 = rollVsRep(rep2);
   const pass1 = roll1.passed;
@@ -93,11 +99,6 @@ const rollForInitiativeReducer = (state) => {
   else startingPlayer = getMovingPlayer(state);
 
   const initRoll = { rep1, rep2, roll1, roll2, startingPlayer };
-
-  // const newPlayers = { ...state.players };
-  // newPlayers.byId[activePlayer].active = true;
-  // newPlayers.byId[inactivePlayer].active = false;
-  //  players: { ...state.players, byId: newPlayers },
 
   return { ...state,
    phase: 2,
@@ -114,8 +115,6 @@ const attackClassReducer = (state, payload) => ({ ...state, classOrder: payload 
 
 const figureAttacksReducer = (state, payload) => ({ ...state, classOrder: payload });
 
-//  [decrement]: (state) => state - 1,
-//  [add]: (state, payload) => state + payload,
 const gameReducer = createReducer({
   [randomInit]: randomInitReducer,
   [rollForInitiative]: rollForInitiativeReducer,

@@ -1,52 +1,57 @@
 import React from 'react';
-import Chip from 'material-ui/Chip';
-import Badge from 'material-ui/Badge';
 import Avatar from 'material-ui/Avatar';
-import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
+import Paper from 'material-ui/Paper';
 import CasterIcon from './CasterIcon';
 import MissileIcon from './MissileIcon';
 import MeleeIcon from './MeleeIcon';
 import RepIcon from './RepIcon';
 import ShieldIcon from './ShieldIcon';
 
-const ClassIcon = ({ chclass }) => {
+const ClassIcon = ({ chclass, fillColor = 'white' }) => {
   switch (chclass) {
     case 'Caster':
-      return <CasterIcon color="white" />;
+      return <CasterIcon fill={fillColor} />;
     case 'Missile':
-      return <MissileIcon color="white" />;
+      return <MissileIcon fill={fillColor} />;
     case 'Melee':
-      return <MeleeIcon color="white" />;
+      return <MeleeIcon fill={fillColor} />;
     default:
       return <span>X</span>;
   }
 };
 ClassIcon.propTypes = {
   chclass: React.PropTypes.oneOf(['Caster', 'Missile', 'Melee']).isRequired,
+  fillColor: React.PropTypes.string,
 };
 
-const Figure = ({ name, chclass, rep, ac, playerId }) => (
-  <Card style={{ backgroundColor: (playerId === 1) ? 'darkred' : 'darkgreen', margin: 3 }}>
-    <CardHeader
-      title={<h3>{name}</h3>}
-      subtitle={<div>
-        <Badge badgeContent={rep}>
-          <RepIcon color="white" />
-        </Badge>
-        <Badge badgeContent={ac}>
-          <ShieldIcon color="white" />
-        </Badge>
-      </div>}
-      avatar={<Avatar backgroundColor={(playerId === 1) ? 'red' : 'green'} icon={<ClassIcon chclass={chclass} />} />}
+const Figure = ({ id, name, chclass, rep, ac, playerId, selected = false, handler = null }) => (
+  <Paper
+    onClick={handler && (() => handler(id))}
+    zDepth={selected ? 5 : 1}
+    style={{
+      display: 'flex',
+      backgroundColor: (playerId === 1) ? 'darkred' : 'darkgreen',
+      margin: '5px',
+      padding: '5px' }}
+  >
+    <Avatar
+      backgroundColor={(playerId === 1) ? 'red' : 'green'}
+      icon={<ClassIcon chclass={chclass} />}
     />
-  </Card>
+    <span>{name}</span>
+    <RepIcon />{rep}
+    <ShieldIcon />{ac}
+  </Paper>
 );
 Figure.propTypes = {
+  id: React.PropTypes.number.isRequired,
   name: React.PropTypes.string.isRequired,
   chclass: React.PropTypes.oneOf(['Caster', 'Missile', 'Melee']).isRequired,
   rep: React.PropTypes.number.isRequired,
   ac: React.PropTypes.number.isRequired,
   playerId: React.PropTypes.number.isRequired,
+  selected: React.PropTypes.bool,
+  handler: React.PropTypes.func,
 };
 
 export default Figure;

@@ -2,17 +2,14 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Paper from 'material-ui/Paper';
 import ActionButton from '../components/ActionButton';
-import InitFigureRow from '../containers/InitFigureRow';
+import MovementFigureRow from '../containers/MovementFigureRow';
 import PlayerBar from '../containers/PlayerBar';
 
 import {
-  getPhase,
-  getSelection,
-  getActiveFiguresCount,
-  getAssignedAttacksCount,
-  getInactiveFiguresCount,
-  getAssignedTargetsCount,
-  attackDoubledUp,
+  getAssignments,
+  areAnyFiguresUnassigned,
+  areFiguresDoubledUpIllegally,
+  areAssignmentsReady,
   } from '../reducers';
 
 import {
@@ -20,53 +17,42 @@ import {
   } from '../actionCreators';
 
 const MovementBoard = ({
-  selection,
-  displayMovementEndButton,
-  displayAssignNotice,
-  displayDoubleUpNotice,
+  assignmentsReady,
   movementEnd,
+  assignments,
+  unassignedFigures,
+  doubledUpFigures,
    }) => (
   <div>
     <PlayerBar playerId={1} />
-    <InitFigureRow playerId={1} />
+    <MovementFigureRow playerId={1} />
     <hr />
-    <InitFigureRow playerId={2} />
+    <MovementFigureRow playerId={2} />
     <PlayerBar playerId={2} />
-    { displayAssignNotice
-      && <Paper style={{ padding: 20, margin: 5 }}>
-      Still some attackers to assign!
-      </Paper> }
-    { displayDoubleUpNotice
-      && <Paper style={{ padding: 20, margin: 5 }}>
-      All defending figures must be targeted before doubling up!
-      </Paper> }
-    { displayMovementEndButton
-      && <ActionButton label="Proceed to attack phase" action={() => movementEnd(selection)} /> }
+    <Paper style={{ padding: 20, margin: 5 }}>
+    { unassignedFigures
+      && <span>Still some attackers to assign!</span> }
+    { doubledUpFigures
+      && <span>All defending figures must be targeted before doubling up!</span> }
+    </Paper>
+    { assignmentsReady
+      && <ActionButton label="Proceed to attack phase" action={() => movementEnd(assignments)} /> }
   </div>
 );
 MovementBoard.propTypes = {
-  selection: React.PropTypes.object.isRequired,
-  displayMovementEndButton: React.PropTypes.bool.isRequired,
-  displayAssignNotice: React.PropTypes.bool.isRequired,
-  displayDoubleUpNotice: React.PropTypes.bool.isRequired,
+  assignmentsReady: React.PropTypes.bool.isRequired,
   movementEnd: React.PropTypes.func.isRequired,
+  assignments: React.PropTypes.object.isRequired,
+  unassignedFigures: React.PropTypes.bool.isRequired,
+  doubledUpFigures: React.PropTypes.bool.isRequired,
 };
-
-const allAttacksAssigned =
-  (state) => (getActiveFiguresCount(state) === getAssignedAttacksCount(state));
-
-const illegalDoublingUp = (state) =>
- (attackDoubledUp(state) && getAssignedTargetsCount(state) < getInactiveFiguresCount(state));
-
-const attackSelectionReady = (state) =>
-  (getPhase(state) === 0 && allAttacksAssigned(state) && !illegalDoublingUp(state));
 
 const mapStateToProps = (state) => (
   {
-    selection: getSelection(state),
-    displayMovementEndButton: attackSelectionReady(state),
-    displayAssignNotice: !allAttacksAssigned(state),
-    displayDoubleUpNotice: illegalDoublingUp(state),
+    assignments: getAssignments(state),
+    assignmentsReady: areAssignmentsReady(state),
+    unassignedFigures: areAnyFiguresUnassigned(state),
+    doubledUpFigures: areFiguresDoubledUpIllegally(state),
   }
   );
 
