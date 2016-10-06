@@ -32,11 +32,11 @@ const getLeaderRep = (state, playerId) => {
 const getMovingPlayer = (state) => state.movingPlayer;
 export const getPlayerName = (state, playerId) => state.players.byId[playerId].name;
 export const isPlayerMoving = (state, playerId) => getMovingPlayer(state) === playerId;
+export const getFiguresById = (state) => state.figures.byId;
 
 //
 // Are these neeeded?
 //
-// export const getFiguresById = (state) => state.figures.byId;
 // export const getPlayers = (state) => state.players.allIds.map(id => state.players.byId[id]);
 // export const getAttack = (state) => state.attack;
 // export const getClassOrder = (state) => state.classOrder;

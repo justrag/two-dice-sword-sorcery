@@ -4,8 +4,8 @@ import { selectMovementSource, selectMovementTarget, selectCurrent } from '../ac
 
 export const getMovementSource = (state) => state.movementSource;
 export const getAssignments = (state) => state.assignments;
-const getAssignedAttacks = (state) => Object.keys(getAssignments(state));
-export const getAssignedFiguresCount = (state) => getAssignedAttacks(state).length;
+export const getAssignedSources = (state) => Object.keys(getAssignments(state));
+export const getAssignedFiguresCount = (state) => getAssignedSources(state).length;
 const getAssignedTargets = (state) => {
   const assignments = getAssignments(state);
   return Object.keys(assignments).map(k => assignments[k]); // Object.values(assignments)

@@ -23,28 +23,53 @@ export const areAssignmentsReady = (state) =>
   (!areAnyFiguresUnassigned(state) && !areFiguresDoubledUpIllegally(state));
 export const getPlayerName = (state, playerId) => fromGame.getPlayerName(state.game, playerId);
 export const isPlayerMoving = (state, playerId) => fromGame.isPlayerMoving(state.game, playerId);
+const getAssignedSources = (state) => fromUi.getAssignedSources(state.ui);
+export const getUnassignedPlayerFigures = (state, playerId) => {
+  const sources = getAssignedSources(state);
+  return getPlayerFigures(state, playerId).filter(f => !sources.includes(String(f.id)));
+};
 
 //
 // Are these needed?
 //
+/*
+export const getPlayerFiguresWithAttackers = (state, playerId) => {
+  const active = isPlayerActive(state, playerId);
+  const playerFigures = getPlayerFigures(state, playerId);
+  const assignments = getAssignments(state);
+  const allFiguresById = getFiguresById(state);
+  const sources = getAssignedSources(state);
+
+  return playerFigures
+  // assigned figures will show as attackers
+         .filter(pf => (!active || !sources.includes(String(pf.id))))
+  // add attackers to figure object
+         .map(f => (
+           { ...f,
+            attackers: Object.keys(assignments)
+                            .reduce((atkArr, s) => {
+                              if (assignments[s] === f.id) {
+                                atkArr.push(allFiguresById[s]);
+                              }
+                              return atkArr;
+                            }, []),
+           }
+            ));
+};
+*/
+// const getFiguresById = (state) => fromGame.getFiguresById(state.game);
 // export const getFiguresById = (state) => fromGame.getFiguresById(state.game);
 // export const getFigures = (state) => fromGame.getFigures(state.game);
 // export const getActivePlayer = (state) => fromGame.getActivePlayer(state.game);
 // export const getAttackSource = (state) => fromUi.getAttackSource(state.ui);
 // export const attackDoubledUp = (state) => fromUi.attackDoubledUp(state.ui);
-
 // export const getAssignedAttacksCount = (state) => fromUi.getAssignedAttacksCount(state.ui);
 // export const getAssignedAttacks = (state) => fromUi.getAssignedAttacks(state.ui);
 // export const getAssignedTargetsCount = (state) => fromUi.getAssignedTargetsCount(state.ui);
-
 // export const getAttack = (state) => fromGame.getAttack(state.game);
 // export const getClassOrder = (state) => fromGame.getClassOrder(state.game);
-
 // export const getNotActivatedCasters = (state) => fromGame.getNotActivatedCasters(state.game);
 // export const getAttackFigure = (state) => fromUi.getAttackFigure(state.ui);
-
-
-//
 //
 
 const bulbaReducer = (state, payload) => {
