@@ -14,14 +14,15 @@ export const getInitRoll = (state) => state.initRoll;
 const getFigures = (state) => state.figures.allIds.map(id => state.figures.byId[id]);
 export const getPlayerFigures =
   (state, playerId) => getFigures(state).filter(f => f.player === playerId);
-const getActivePlayer = (state) => state.activePlayer;
+export const getActivePlayer = (state) => state.activePlayer;
 export const isPlayerActive = (state, playerId) => getActivePlayer(state) === playerId;
 export const getActiveFiguresCount =
   (state) => getPlayerFigures(state, getActivePlayer(state)).length;
 const getInactivePlayer = (state) => 3 - state.activePlayer; // 1->2, 2->1
+export const getInactiveFigures =
+  (state) => getPlayerFigures(state, getInactivePlayer(state));
 export const getInactiveFiguresCount =
-  (state) => getPlayerFigures(state, getInactivePlayer(state)).length;
-
+  (state) => getInactiveFigures(state).length;
 
 const getLeaderRep = (state, playerId) => {
   const figs = getPlayerFigures(state, playerId);

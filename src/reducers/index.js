@@ -23,16 +23,24 @@ export const areAssignmentsReady = (state) =>
   (!areAnyFiguresUnassigned(state) && !areFiguresDoubledUpIllegally(state));
 export const getPlayerName = (state, playerId) => fromGame.getPlayerName(state.game, playerId);
 export const isPlayerMoving = (state, playerId) => fromGame.isPlayerMoving(state.game, playerId);
+export const getActivePlayer = (state) => fromGame.getActivePlayer(state.game);
 const getAssignedSources = (state) => fromUi.getAssignedSources(state.ui);
-export const getUnassignedPlayerFigures = (state, playerId) => {
+export const getUnassignedActiveFigures = (state) => {
   const sources = getAssignedSources(state);
-  return getPlayerFigures(state, playerId).filter(f => !sources.includes(String(f.id)));
+  return getPlayerFigures(state, getActivePlayer(state))
+         .filter(f => !sources.includes(String(f.id)));
 };
+export const getInactiveFigures = (state) => fromGame.getInactiveFigures(state.game);
 
 //
 // Are these needed?
 //
 /*
+export const getUnassignedPlayerFigures = (state, playerId) => {
+  const sources = getAssignedSources(state);
+  return getPlayerFigures(state, playerId).filter(f => !sources.includes(String(f.id)));
+};
+
 export const getPlayerFiguresWithAttackers = (state, playerId) => {
   const active = isPlayerActive(state, playerId);
   const playerFigures = getPlayerFigures(state, playerId);
@@ -60,7 +68,6 @@ export const getPlayerFiguresWithAttackers = (state, playerId) => {
 // const getFiguresById = (state) => fromGame.getFiguresById(state.game);
 // export const getFiguresById = (state) => fromGame.getFiguresById(state.game);
 // export const getFigures = (state) => fromGame.getFigures(state.game);
-// export const getActivePlayer = (state) => fromGame.getActivePlayer(state.game);
 // export const getAttackSource = (state) => fromUi.getAttackSource(state.ui);
 // export const attackDoubledUp = (state) => fromUi.attackDoubledUp(state.ui);
 // export const getAssignedAttacksCount = (state) => fromUi.getAssignedAttacksCount(state.ui);

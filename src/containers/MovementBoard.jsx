@@ -2,8 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Paper from 'material-ui/Paper';
 import ActionButton from '../components/ActionButton';
-import MovementFigureRow from '../containers/MovementFigureRow';
-import PlayerBar from '../containers/PlayerBar';
+import Battlefield from './Battlefield';
+import PlayerBar from './PlayerBar';
 
 import {
   getAssignments,
@@ -25,18 +25,16 @@ const MovementBoard = ({
    }) => (
   <div>
     <PlayerBar playerId={1} />
-    <MovementFigureRow playerId={1} />
-    <hr />
-    <MovementFigureRow playerId={2} />
+    <Battlefield />
     <PlayerBar playerId={2} />
     <Paper style={{ padding: 20, margin: 5 }}>
     { unassignedFigures
       && <span>Still some attackers to assign!</span> }
     { doubledUpFigures
       && <span>All defending figures must be targeted before doubling up!</span> }
-    </Paper>
     { assignmentsReady
       && <ActionButton label="Proceed to attack phase" action={() => movementEnd(assignments)} /> }
+    </Paper>
   </div>
 );
 MovementBoard.propTypes = {
